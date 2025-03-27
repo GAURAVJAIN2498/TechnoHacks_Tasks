@@ -1,0 +1,60 @@
+Task 6: Creating CI/CD Pipeline with GitLab
+Problem Statement:
+Create a CI/CD pipeline using GitLab to automate the deployment process.
+
+Step 1: Set Up a Project on GitLab
+Create a GitLab Account at GitLab.
+Create a new project:
+Click New Project → Create Blank Project.
+Set Visibility to Public or Private.
+Initialize with a README.
+
+Clone the repository to your local machine(git push):
+# git clone https://gitlab.com/your-username/your-repository.git
+# cd your-repository
+
+Step 2: Write a .gitlab-ci.yml File
+Deploy a Flask App as a Docker Container
+
+touch .gitlab-ci.yml
+Edit .gitlab-ci.yml:
+
+{ image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_NAME: "dockerhub-username/flask-docker-app"
+  DOCKER_REGISTRY: "docker.io"
+
+before_script:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+
+build:
+  stage: build
+  script:
+    - docker build -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying application..." }
+Step 3: take a file appy.py and deployment.yml from task 4
+
+Step 4: Monitor the Pipeline Execution
+Push code to GitLab:
+
+# git add .gitlab-ci.yml
+# git commit -m "Add GitLab CI/CD pipeline"
+# git push origin main
+# Check Pipeline Execution:
+
+
+Go to GitLab Project → CI/CD → Pipelines.
+Monitor the status and logs.
