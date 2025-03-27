@@ -1,0 +1,56 @@
+Task 4: Managing Containers with Kubernetes
+Problem Statement:
+Use Kubernetes to manage multiple containers in a cluster.
+
+
+Step 1: install minikube
+install hypervisor(virtualbox docker desktop)
+give minikube location to env
+minikube path to powershell
+choco install minikube -y
+minikube version
+minikube start
+
+
+2.Verify Installation
+# kubectl get nodes
+
+Step 3: Deploy a Containerized Application with Kubernetes
+#deployment.yaml file create
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-container
+        image: gauarvj00/flask-docker-app:latest
+        ports:
+        - containerPort: 5000
+
+# kubectl apply -f deployment.yaml
+# kubectl get pods
+# kubectl expose deployment flask-app --type=NodePort --port=5000
+# minikube service flask-app --url
+
+Step 4: Use kubectl to Manage and Scale the Application
+
+# kubectl scale deployment flask-app --replicas=4
+# kubectl get deployment flask-app
+# kubectl describe pods
+
+Step 5: Monitor the Application’s Performance
+
+# kubectl logs <pod-name>
+# kubectl top pods
+# kubectl get events
