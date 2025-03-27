@@ -1,0 +1,61 @@
+Task 7: Monitoring with Prometheus and Grafana
+Problem Statement:
+Monitor a containerized application using Prometheus and Grafana.
+
+
+Deploy Prometheus and Grafana in Kubernetes on minikube
+We'll use Helm, the package manager for Kubernetes.
+Step 1: Install Helm 
+# curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+Verify the installation:
+#helm version
+
+commands to setup and run 
+1.minikube start
+2.choco install kubernetes-helm
+3.helm version
+4.helm list
+5.helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+6.helm repo update
+7.helm install prometheus prometheus-community/kube-prometheus-stack        
+
+8.kubectl get svc 
+9.kubectl get pods
+10.kubectl get secrets
+11.kubectl port-forward svc/prometheus-grafana 3000:80 
+12.http://localhost:3000
+13.Username: admin
+14.Password: prom-operator
+
+15.kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090 
+16.http://localhost:9090.
+17.Grafana data source -Prometheus- add url
+
+
+next step - Configure Grafana to Use Prometheus as a Data Source
+Open Grafana → Go to Configuration > Data Sources.
+Click "Add data source", select Prometheus.
+## Set URL to http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090.
+Click Save & Test.
+
+Grafana provides a ready-to-use Kubernetes Monitoring Dashboard.
+Go to Grafana > Dashboards > Import.
+Enter Dashboard ID: 3119 (or search for "Kubernetes Cluster Monitoring").
+Select Prometheus as the data source.
+Click Import → Your dashboard is ready! 
+
+Set Up Alerts for High CPU Usage
+##Create a Prometheus Alert Rule (alert.rules.yml):
+
+{   - name: k8s-alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: sum(rate(container_cpu_usage_seconds_total[2m])) > 80
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High CPU usage detected" }
+
+Apply the rule to Prometheus:
+# kubectl apply -f alert.rules.yml -n monitoring
