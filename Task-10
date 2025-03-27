@@ -1,0 +1,49 @@
+Task 10: Building Infrastructure as Code with AWS CloudFormation
+Problem Statement:
+Create and manage cloud resources using AWS CloudFormation.
+
+Steps: 
+1.create aws cloud formation
+2.create stack with new resource
+3.upload a template file of yaml to launch ec2
+4.name stack - myec2stack
+5.next - next create { file run ec2 launch automatically }
+
+template file(ec2-instance.yml)
+
+ {{ AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates an EC2 instance
+
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-05c179eced2eb9b5b
+      KeyName: newkey
+      Tags:
+        - Key: Name
+          Value: CloudFormationInstance }}
+
+
+
+Deploy the CloudFormation Template
+Using AWS CLI
+# aws cloudformation validate-template --template-body file://ec2-instance.yaml
+
+Create a CloudFormation stack
+# aws cloudformation create-stack --stack-name MyEC2Stack --template-body file://ec2-instance.yaml 
+
+Check stack status
+# aws cloudformation describe-stacks --stack-name MyEC2Stack
+
+Step 3: Verify That the Resource Was Created
+Go to AWS Management Console → EC2
+Check if the instance is running.
+
+List Stack Resources via AWS CLI
+# aws cloudformation list-stack-resources --stack-name MyEC2Stack
+
+Step 4: Clean Up Resources
+To delete the stack and all associated resources:
+# aws cloudformation delete-stack --stack-name MyEC2Stack
