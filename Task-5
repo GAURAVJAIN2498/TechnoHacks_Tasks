@@ -1,0 +1,59 @@
+Task 5: Automating Infrastructure with Terraform
+Problem Statement:
+Use Terraform to automate infrastructure deployment on the cloud.
+
+ Step 1: on git bash
+# aws configure
+# access key - secret key
+# mkdir terraform-aws && cd terraform-aws
+# touch main.tf variables.tf outputs.tf
+
+Step 2: Write a Terraform Script to Deploy Infrastructure
+# mkdir terraform-aws && cd terraform-aws
+# touch 1.main.tf 2.variables.tf 3.outputs.tf
+
+1.
+provider "aws" {
+  region = var.aws_region
+}
+
+resource "aws_instance" "web" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+
+  tags = {
+    Name = "Terraform-EC2"
+  }
+}
+
+
+2.
+variable "aws_region" {
+  default = "us-east-1"
+}
+
+variable "ami_id" {
+  default = "ami-0c55b159cbfafe1f0" 
+}
+
+variable "instance_type" {
+  default = "t2.micro"
+}
+
+3.output "instance_public_ip" {
+  value = aws_instance.web.public_ip
+}
+
+Step 3: Apply the Terraform Script and Create Infrastructure
+# terraform init
+# terraform validate
+# terraform plan
+# terraform apply -auto-approve
+
+
+Step 4: Verify and Destroy the Infrastructure
+Verify the EC2 instance in AWS Console (EC2 Dashboard).
+
+Destroy the infrastructure:
+# terraform destroy -auto-approve
+
