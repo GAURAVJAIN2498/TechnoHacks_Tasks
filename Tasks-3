@@ -3,3 +3,54 @@ Task 3: Implementing Docker for Containerization
 Problem Statement:
 Containerize an application using Docker and run it on your local machine.
 
+1. Create an AWS Instance on linux os
+2. give All traffic access to instance
+3. install docker 
+4. start , enable docker
+5. create repo and add app.py file
+
+6. app.py
+ # from flask import Flask
+
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello, Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+7. create Dockerfile
+ # FROM python:3.9
+
+WORKDIR /app
+
+COPY . /app
+
+RUN pip install flask
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+
+8. give reference of app.py file in dockerfile
+9.build and rundocker container
+
+ # docker build -t flask-docker-app
+ # docker run -d -p 5000:5000 --name my-container flask-docker-app
+
+10. Test the Application Inside the Container
+# docker ps
+#  http://localhost:5000
+# Hello, Docker!
+# docker stop my-container
+# docker rm my-container
+
+11. Push Docker Image to Docker Hub
+
+# docker login
+# docker tag flask-docker-app your-dockerhub-username/flask-docker-app
+# docker push your-dockerhub-username/flask-docker-app
+
