@@ -1,0 +1,10 @@
+# Problem Statement:
+Install and configure Git for version control to manage source code versions and collaborate on projects.
+
+1. Create a github/gitlab repo
+2. Then do authenticate on git bash cli.
+3. Give remote path in git bash to connect with working repo
+4. Create file 
+5. git add
+6. commit it
+7. Push it
