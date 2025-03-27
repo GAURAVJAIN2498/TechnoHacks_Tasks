@@ -1,0 +1,59 @@
+Task 9: Securing CI/CD Pipeline with Vault
+Problem Statement:
+Secure sensitive credentials in a CI/CD pipeline using Vault.
+
+
+Step 1: Install and Configure Vault
+
+# sudo yum install -y yum-utils
+# sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+# sudo yum install -y vault
+# vault server -dev
+
+3. Set Up Vault CLI
+
+# export VAULT_ADDR='http://127.0.0.1:8200'
+# export VAULT_TOKEN='your-root-token'
+
+Step 2: Store Sensitive Credentials in Vault
+Enable a secrets engine:
+# vault secrets enable -path=ci-cd kv
+
+Store credentials:
+# vault kv put ci-cd/docker username="your-docker-username" password="your-docker-password"
+
+Verify stored credentials:
+# vault kv get ci-cd/docker
+
+Step-4 Integrate Vault into a CI/CD Pipeline
+create .gitlab-ci.yml file:
+
+{{   image: hashicorp/vault:latest
+
+variables:
+  VAULT_ADDR: "http://vault-server-ip:8200"
+  VAULT_TOKEN: "root-token"
+
+stages:
+  - retrieve-secrets
+  - build
+
+retrieve-secrets:
+  stage: retrieve-secrets
+  script:
+    - export CREDENTIALS=$(vault kv get -format=json ci-cd/docker | jq -r '.data.data')
+    - echo "DOCKER_USERNAME=$(echo $CREDENTIALS | jq -r '.username')" >> $GITHUB_ENV
+    - echo "DOCKER_PASSWORD=$(echo $CREDENTIALS | jq -r '.password')" >> $GITHUB_ENV
+
+build:
+  stage: build
+  script:
+    - echo "Using secured credentials in the pipeline"
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"   }}
+
+step 5:
+run ci/cd pipeline
+
+Check Vault Audit Logs:
+# vault audit enable file file_path=/var/log/vault_audit.log
+# tail -f /var/log/vault_audit.log
