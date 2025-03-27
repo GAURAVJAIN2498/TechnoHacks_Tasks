@@ -1,0 +1,26 @@
+Problem Statement:
+Set up Jenkins to automate the build and testing process.
+
+1. Create an AWS Instance on linux os
+2. give All traffic access to instance
+3. install java-17
+4. install jenkins 
+5. start it with public ip:8080
+6. give password from adminpassword create user
+7. install important plugins to run a job
+8. create a new job 
+9. build - excute shell - write ' echo " hello to all " '
+10. run the job with build in node on idle executor
+
+
+commands to setup jenkins
+
+sudo dnf install java-17-amazon-corretto -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum install jenkins -y
+sudo systemctl start jenkins
+sudo systemctl enable Jenkins
+
+http://<your-server-ip>:8080
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
